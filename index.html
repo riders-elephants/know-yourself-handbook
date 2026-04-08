@@ -1,0 +1,1393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Know Yourself Handbook · Clickable Prototype · Riders & Elephants</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* =========================================================
+   R&E BRAND SHELL (outer chrome only)
+   ========================================================= */
+:root{
+  --re-cream:#F5F5F2;
+  --re-gold:#C09757;
+  --re-charcoal:#2D2825;
+  --re-orange-red:#F15A40;
+  --re-brand-blue:#3A5FAC;
+  --re-soft-grey:#E8E6E1;
+  --re-warm-grey:#6B6560;
+
+  /* Know Yourself handbook palette (strict) */
+  --ky-pink:#F4C8CC;
+  --ky-pink-deep:#EFB4BA;
+  --ky-red:#E8473F;
+  --ky-red-deep:#C93A33;
+  --ky-cream:#FBF4EA;
+  --ky-navy:#1E3A8A;
+  --ky-mustard:#D4A53A;
+  --ky-blue:#2947B8;
+  --ky-ink:#1B1B1B;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--re-cream);color:var(--re-charcoal);font-family:'Montserrat',Arial,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:0;background:none}
+input,textarea{font-family:inherit;color:inherit}
+
+/* TOP BAR */
+.re-top{background:var(--re-charcoal);color:var(--re-cream);padding:14px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px;position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.re-top .brand{display:inline-flex;align-items:baseline;gap:0;font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:18px;color:#fff;letter-spacing:-.015em;flex-shrink:0;white-space:nowrap}
+.re-top .brand .amp{color:var(--re-gold);font-family:'Fraunces',serif;font-style:italic;margin:0 1px;font-weight:500}
+.re-top .crumbs{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.14em;text-transform:uppercase;flex:1;min-width:0;text-align:center}
+.re-top .crumbs b{color:var(--re-gold)}
+.re-top .actions{display:flex;gap:10px;flex-shrink:0}
+@media(max-width:720px){
+  .re-top{padding:12px 16px;gap:10px}
+  .re-top .brand{font-size:15px}
+  .re-top .crumbs{display:none}
+  .btn{padding:9px 12px;font-size:10px;letter-spacing:.1em}
+}
+.btn{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:10px 16px;border-radius:999px;transition:all .2s}
+.btn.ghost{color:var(--re-cream);border:1px solid rgba(255,255,255,.25)}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.btn.gold{background:var(--re-gold);color:var(--re-charcoal)}
+.btn.gold:hover{background:#D0A667}
+.btn.dark{background:var(--re-charcoal);color:var(--re-cream)}
+.btn.dark:hover{background:#3C3630}
+.btn.red{background:var(--ky-red);color:#fff}
+.btn.red:hover{background:var(--ky-red-deep)}
+
+.stage{min-height:calc(100vh - 54px);display:none;padding:40px 28px 80px}
+@media(max-width:720px){.stage{padding:24px 14px 60px}}
+.stage.active{display:block;animation:fade .5s ease}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wrap{max-width:1180px;margin:0 auto}
+
+/* =========================================================
+   STAGE 0 · THE COVER  (FAITHFUL TO THE HANDBOOK)
+   ========================================================= */
+.cover-top-hint{text-align:center;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--re-gold);font-weight:600;margin:8px 0 22px}
+.cover-top-hint .bar{display:inline-block;width:40px;height:2px;background:var(--re-gold);vertical-align:middle;margin:0 10px}
+
+.booklet{display:grid;grid-template-columns:1fr 1.05fr 1fr 1.15fr;border-radius:4px;overflow:hidden;box-shadow:0 50px 120px -30px rgba(45,40,37,.35),0 20px 40px -20px rgba(45,40,37,.2);background:#fff;aspect-ratio:1.7/1;max-width:1180px;margin:0 auto}
+.booklet .panel{padding:40px 30px;position:relative;display:flex;flex-direction:column;font-family:'Fraunces',Georgia,serif;color:var(--ky-ink);overflow:hidden}
+
+/* Panel 1 — pink unfold */
+.p-unfold{background:var(--ky-pink);justify-content:space-between}
+.p-unfold .mark{display:flex;align-items:center;gap:8px}
+.p-unfold .mark .ele{width:30px;height:22px}
+.p-unfold .mark span{font-family:'Montserrat',sans-serif;font-size:9px;line-height:1.3;letter-spacing:.02em;color:var(--ky-ink);text-transform:none}
+.p-unfold .mark span b{font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:11px;display:block}
+.p-unfold .unfold-msg{text-align:center;color:#fff;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.14em;line-height:1.8;text-transform:uppercase;font-weight:500;padding:0 6px}
+.p-unfold .unfold-msg .line{width:40px;height:1px;background:#fff;margin:14px auto 0}
+.p-unfold .url{font-size:8px;font-family:'Montserrat',sans-serif;color:var(--ky-ink);opacity:.4;letter-spacing:.06em;text-align:center}
+
+/* Panel 2 — white How I Roll preview */
+.p-roll{background:#fff}
+.p-roll .ph{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ky-red);font-weight:700;text-align:center;margin-bottom:36px;font-family:'Montserrat',sans-serif}
+.p-roll .ms{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px;margin-bottom:20px}
+.p-roll .ms .lbl{font-family:'Fraunces',serif;font-size:11px;color:var(--ky-red);font-weight:500;line-height:1.2}
+.p-roll .ms .lbl.r{text-align:right}
+.p-roll .ms .tk{height:1px;background:#E6BDC2;position:relative}
+.p-roll .ms .tk i{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--ky-mustard);top:-3px}
+
+/* Panel 3 — pink Three Good Things */
+.p-three{background:var(--ky-pink);justify-content:flex-start}
+.p-three .ph{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ky-red);font-weight:700;text-align:center;margin-bottom:28px;font-family:'Montserrat',sans-serif}
+.p-three .nums{display:flex;flex-direction:column;gap:24px;padding-left:4px}
+.p-three .nums .n{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:var(--ky-ink);line-height:1}
+.p-three .desc{font-size:9px;font-style:italic;font-family:'Fraunces',serif;color:var(--ky-ink);text-align:center;line-height:1.5;margin-top:auto;padding:0 6px;opacity:.75}
+.p-three .blobs{height:36px;margin-top:12px;position:relative}
+.p-three .blobs svg{position:absolute;left:50%;transform:translateX(-50%);bottom:-8px}
+
+/* Panel 4 — red title (the money shot) */
+.p-title{background:var(--ky-red);color:#fff;align-items:center;text-align:center;justify-content:space-between;padding:36px 26px}
+.p-title .compass{width:34px;height:34px;margin-bottom:24px}
+.p-title .ecd{font-family:'Fraunces',serif;font-style:italic;font-size:13px;font-weight:400;text-decoration:underline;text-underline-offset:3px;margin-bottom:18px;opacity:.95}
+.p-title h1{font-family:'Fraunces',serif;font-weight:500;font-size:42px;line-height:1.02;margin:0;color:#fff;letter-spacing:-0.01em}
+.p-title .divider{width:44px;height:1px;background:#fff;margin:22px auto 16px}
+.p-title .for{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:auto}
+.p-title .mark{display:flex;align-items:center;gap:8px;margin-top:28px;color:#fff}
+.p-title .mark .ele{width:30px;height:22px}
+.p-title .mark span{font-family:'Montserrat',sans-serif;font-size:9px;line-height:1.3;opacity:.9}
+.p-title .mark span b{font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:11px;display:block}
+
+/* Unfold CTA below the booklet */
+.cover-cta{text-align:center;margin-top:44px}
+.cover-cta .big{font-size:12px;padding:18px 32px;letter-spacing:.14em}
+.cover-cta p{font-size:12px;color:var(--re-warm-grey);margin:18px auto 0;max-width:480px;font-family:'Montserrat',sans-serif}
+
+@media(max-width:900px){
+  .booklet{grid-template-columns:1fr;aspect-ratio:auto}
+  .booklet .panel{min-height:280px;padding:32px 28px}
+  .p-title h1{font-size:52px}
+}
+
+/* =========================================================
+   INNER STAGES — HANDBOOK INNER SPREAD LANGUAGE
+   ========================================================= */
+.kyh-chrome{background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 40px 100px -30px rgba(45,40,37,.3),0 12px 30px -10px rgba(45,40,37,.12);border:1px solid var(--re-soft-grey)}
+.kyh-chrome .bar{background:var(--re-soft-grey);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.kyh-chrome .bar .tag{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--re-warm-grey);font-weight:600}
+.kyh-chrome .bar .sep{color:#bbb}
+.kyh-chrome .bar .title{font-family:'Fraunces',serif;font-size:12px;font-style:italic;font-weight:500;color:var(--re-charcoal)}
+.kyh-chrome .bar .save{margin-left:auto;font-size:10px;color:#6B9D5C;font-weight:600;display:flex;align-items:center;gap:6px}
+.kyh-chrome .bar .save .sdot{width:6px;height:6px;border-radius:50%;background:#6B9D5C;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.kyh{background:var(--ky-pink);font-family:'Fraunces',Georgia,serif;color:var(--ky-ink)}
+.kyh .panel{padding:56px 48px}
+@media(max-width:720px){
+  .kyh .panel{padding:32px 22px}
+  .kyh .panel h2{font-size:30px !important}
+  .name-field{font-size:28px !important}
+}
+.kyh .panel.cream{background:var(--ky-cream)}
+.kyh .panel.white{background:#fff}
+.kyh .panel.red{background:var(--ky-red);color:#fff}
+.kyh .panel.navy{background:var(--ky-navy);color:#fff}
+.kyh .panel .eyebrow{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ky-red);font-weight:700;margin-bottom:22px}
+.kyh .panel.red .eyebrow,.kyh .panel.navy .eyebrow{color:rgba(255,255,255,.75)}
+.kyh .panel h2{font-family:'Fraunces',serif;font-weight:500;font-size:44px;line-height:1.02;margin:0 0 14px;letter-spacing:-0.01em}
+.kyh .panel p.instr{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:rgba(0,0,0,.55);max-width:540px;margin-bottom:36px}
+.kyh .panel.red p.instr,.kyh .panel.navy p.instr{color:rgba(255,255,255,.8)}
+
+/* Stage 1 — name input */
+.name-field{background:transparent;border:0;border-bottom:2px dashed var(--ky-red);padding:14px 0;font-family:'Fraunces',serif;font-size:40px;font-weight:500;width:100%;max-width:520px;outline:none;color:var(--ky-ink)}
+.name-field:focus{border-bottom-style:solid}
+.signoff{margin-top:40px;display:flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.06em;color:rgba(0,0,0,.45)}
+.signoff svg{width:26px;height:18px}
+.signoff span b{font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:11px;display:block;color:rgba(0,0,0,.6)}
+
+/* HOW I ROLL sliders — inner */
+.rollset{display:grid;gap:26px;margin-top:8px}
+.roll{display:grid;grid-template-columns:150px 1fr 150px;align-items:center;gap:24px}
+@media (max-width:700px){.roll{grid-template-columns:1fr;gap:6px}.roll .lbl.r{text-align:left !important}}
+.roll .lbl{font-family:'Fraunces',serif;font-size:18px;color:var(--ky-red);font-weight:500}
+.roll .lbl.r{text-align:right}
+.roll .track{position:relative;height:36px;display:flex;align-items:center}
+.roll .track::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--ky-pink-deep);transform:translateY(-50%)}
+.roll .track .ticks{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center}
+.roll .track .tick{width:1px;height:6px;background:var(--ky-pink-deep)}
+.roll input[type=range]{-webkit-appearance:none;appearance:none;width:100%;background:transparent;position:relative;z-index:2;height:36px}
+.roll input[type=range]:focus{outline:none}
+.roll input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--ky-mustard);border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:grab;transition:transform .15s}
+.roll input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.roll input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--ky-mustard);border:3px solid #fff;cursor:grab}
+
+/* Three good things — pink panel, italic serif */
+.three{display:grid;gap:26px;max-width:680px}
+.three .item{display:grid;grid-template-columns:54px 1fr;gap:16px;align-items:baseline}
+.three .n{font-family:'Fraunces',serif;font-size:34px;color:var(--ky-ink);line-height:1;font-weight:500}
+.three textarea{background:transparent;border:0;border-bottom:1px dashed rgba(0,0,0,.3);padding:6px 0 10px;color:var(--ky-ink);font-family:'Fraunces',serif;font-size:20px;line-height:1.4;width:100%;outline:none;transition:border-color .2s;resize:none;overflow:hidden;min-height:38px;display:block}
+.three textarea:focus{border-bottom-color:var(--ky-red);border-bottom-style:solid}
+.three textarea::placeholder{color:rgba(0,0,0,.35);font-style:italic}
+
+/* Develop stage — vertical rotated labels (handbook style) */
+.develop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,0,0,.08);margin-top:8px}
+@media(max-width:820px){.develop-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.develop-grid{grid-template-columns:1fr}}
+.develop-cell{background:var(--ky-cream);padding:22px 22px 24px;min-height:240px;display:flex;flex-direction:column;gap:12px}
+.develop-cell .vlabel{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ky-red);font-weight:700;line-height:1.4;padding-bottom:10px;border-bottom:1px dashed rgba(232,71,63,.35)}
+.develop-cell textarea{flex:1;background:transparent;border:0;font-family:'Fraunces',serif;font-size:17px;color:var(--ky-ink);resize:none;outline:none;line-height:1.4;padding:0;width:100%;overflow:hidden;min-height:140px}
+.develop-cell textarea::placeholder{color:rgba(0,0,0,.3);font-style:italic}
+
+/* Emotions grid — cream background, red top bar, rotated labels (handbook style) */
+.kyh .emotions-wrap{margin:0 -48px -56px;background:var(--ky-cream)}
+.kyh .emotions-top{background:var(--ky-red);color:#fff;padding:16px 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.kyh .emotions-top div{font-family:'Fraunces',serif;font-size:16px;font-weight:500}
+.emo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,0,0,.06)}
+@media(max-width:820px){.kyh .emotions-top,.emo-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.kyh .emotions-top,.emo-grid{grid-template-columns:1fr}}
+.emo-cell{background:var(--ky-cream);padding:22px 22px 26px;min-height:260px;display:flex;flex-direction:column;gap:12px}
+.emo-cell .vlabel{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;line-height:1.4;padding-bottom:10px;border-bottom:1px dashed rgba(0,0,0,.18)}
+.emo-cell.blue .vlabel{color:var(--ky-blue);border-bottom-color:rgba(41,71,184,.3)}
+.emo-cell.red .vlabel{color:var(--ky-red);border-bottom-color:rgba(232,71,63,.3)}
+.emo-cell textarea{flex:1;background:transparent;border:0;font-family:'Fraunces',serif;font-size:16px;color:var(--ky-ink);resize:none;outline:none;line-height:1.45;width:100%}
+.emo-cell textarea::placeholder{color:rgba(0,0,0,.3);font-style:italic}
+
+/* =========================================================
+   FEELINGS PAGE · per-emotion row layout (one row per picked card)
+   ========================================================= */
+.feelings-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:16px;padding-top:4px}
+.feelings-head .picker{flex:1;min-width:260px;max-width:640px}
+.feelings-cap{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.55;white-space:nowrap}
+.feelings-rows{margin:20px -48px 0;padding:0}
+.feeling-row{display:grid;grid-template-columns:minmax(220px,240px) repeat(3,1fr);gap:1px;background:rgba(255,255,255,.08)}
+.feeling-row + .feeling-row{margin-top:1px}
+.feeling-row .cell{padding:26px 24px 28px;min-height:180px;display:flex;flex-direction:column;gap:10px}
+.feeling-row .cell.label{justify-content:center;gap:8px;padding:30px 24px}
+.feeling-row .cell textarea{flex:1;background:transparent;border:0;font-family:'Fraunces',serif;font-size:16px;color:inherit;resize:none;outline:none;line-height:1.45;width:100%}
+.feeling-row .cell textarea::placeholder{opacity:.4;font-style:italic}
+.feeling-row .cell .hd{font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.55;padding-bottom:8px;border-bottom:1px dashed currentColor}
+.feeling-row .cell.label .emo{font-family:'Fraunces',serif;font-size:clamp(20px,2.1vw,28px);font-weight:500;line-height:1.05;letter-spacing:-.015em;word-break:normal;overflow-wrap:break-word;hyphens:none;max-width:100%}
+.feeling-row .cell.label .emo.long{font-size:clamp(17px,1.8vw,23px)}
+.feeling-row .cell.label .emo.xlong{font-size:clamp(15px,1.6vw,20px)}
+.feeling-row .cell.label .num{font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;font-weight:700}
+
+/* Desired feelings — dark reverse colorway with R&E gold */
+.kyh.feelings-pos{background:#121010;color:#FBF4EA}
+.kyh.feelings-pos .panel{background:#121010;color:#FBF4EA}
+.kyh.feelings-pos .panel h2{color:#FBF4EA}
+.kyh.feelings-pos .panel .eyebrow{color:var(--re-gold)}
+.kyh.feelings-pos .panel p.instr{color:rgba(255,255,255,.6)}
+.kyh.feelings-pos .feelings-rows{background:#121010;padding-bottom:36px}
+.kyh.feelings-pos .feeling-row{background:rgba(255,255,255,.1)}
+.kyh.feelings-pos .feeling-row .cell{background:#1a1614;color:#FBF4EA}
+.kyh.feelings-pos .feeling-row .cell.label{background:#0a0807}
+.kyh.feelings-pos .feeling-row .cell.label .emo{color:var(--re-gold)}
+.kyh.feelings-pos .feeling-row .cell.label .num{color:rgba(255,255,255,.35)}
+.kyh.feelings-pos .feelings-empty{padding:48px 48px 56px;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:rgba(255,255,255,.45)}
+.kyh.feelings-pos .picker .chip{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#FBF4EA}
+.kyh.feelings-pos .picker .deck-btn{background:var(--re-gold);color:#121010}
+.kyh.feelings-pos .picker .chips .empty{color:rgba(255,255,255,.4)}
+
+/* Undesired feelings — cream handbook style */
+.kyh.feelings-neg{background:var(--ky-cream)}
+.kyh.feelings-neg .panel{background:var(--ky-cream)}
+.kyh.feelings-neg .feelings-rows{background:var(--ky-red);padding-bottom:36px}
+.kyh.feelings-neg .feeling-row{background:rgba(0,0,0,.08)}
+.kyh.feelings-neg .feeling-row .cell{background:#fff;color:var(--ky-ink)}
+.kyh.feelings-neg .feeling-row .cell.label{background:var(--ky-red);color:#fff}
+.kyh.feelings-neg .feeling-row .cell.label .emo{color:#fff}
+.kyh.feelings-neg .feeling-row .cell.label .num{color:rgba(255,255,255,.6)}
+.kyh.feelings-neg .feelings-empty{padding:48px 48px 56px;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:rgba(0,0,0,.35);background:#fff}
+
+@media(max-width:820px){
+  .feeling-row{grid-template-columns:1fr}
+  .feeling-row .cell{min-height:auto}
+}
+
+.stepnav{display:flex;align-items:center;justify-content:space-between;margin-top:32px;gap:16px;flex-wrap:wrap}
+.stepnav .progress{flex:1;min-width:200px;display:flex;align-items:center;gap:14px}
+.stepnav .bar{flex:1;height:2px;background:var(--re-soft-grey);border-radius:2px;overflow:hidden}
+.stepnav .bar .fill{height:100%;background:var(--ky-red);transition:width .5s cubic-bezier(.2,.9,.2,1);width:0}
+.stepnav .count{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--re-warm-grey);font-weight:600;white-space:nowrap;font-family:'Montserrat',sans-serif}
+.stepnav .nav{display:flex;gap:10px}
+
+/* =========================================================
+   STAGE 7 · SHARE MOMENT
+   ========================================================= */
+.share-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;max-width:1180px;margin:0 auto}
+@media(max-width:900px){.share-wrap{grid-template-columns:1fr}}
+.share-left h1{font-family:'Fraunces',serif;font-size:clamp(40px,5vw,68px);font-weight:500;line-height:.98;color:var(--re-charcoal);margin:0 0 18px}
+.share-left h1 em{font-style:italic;color:var(--ky-red)}
+.share-left p{color:var(--re-warm-grey);max-width:440px;font-size:16px}
+.share-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+
+.share-card-outer{perspective:1400px}
+.share-card{aspect-ratio:1/1;border-radius:6px;overflow:hidden;box-shadow:0 50px 100px -20px rgba(45,40,37,.4),0 12px 30px -10px rgba(45,40,37,.2);background:var(--ky-red);display:flex;flex-direction:column;transform:rotate(-1.5deg);transition:transform .4s;color:#fff;font-family:'Fraunces',serif;position:relative}
+.share-card:hover{transform:rotate(0)}
+.share-card .topbar{padding:22px 28px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.share-card .topbar .compass{width:28px;height:28px}
+.share-card .topbar .mark{text-align:right;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.04em;line-height:1.3}
+.share-card .topbar .mark b{display:block;font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:11px}
+.share-card .ecd{text-align:center;font-style:italic;font-size:13px;text-decoration:underline;text-underline-offset:3px;margin:18px 0 12px;opacity:.95}
+.share-card .title{font-family:'Fraunces',serif;font-size:38px;font-weight:500;line-height:1;text-align:center;margin:0 0 8px;letter-spacing:-.01em}
+.share-card .tline{width:44px;height:1px;background:#fff;margin:14px auto 12px}
+.share-card .for{text-align:center;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:20px;opacity:.95}
+.share-card .body{flex:1;background:var(--ky-pink);color:var(--ky-ink);padding:22px 28px;display:flex;flex-direction:column;gap:12px}
+.share-card .body .name{font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--ky-red)}
+.share-card .body .quote{font-family:'Fraunces',serif;font-size:18px;line-height:1.25;font-weight:500}
+.share-card .body .quote span{background:linear-gradient(180deg,transparent 55%,rgba(232,71,63,.38) 55%,rgba(232,71,63,.38) 92%,transparent 92%);padding:0 2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.share-card .rolls{display:grid;gap:6px;margin-top:auto;padding-top:10px;border-top:1px dashed rgba(0,0,0,.2)}
+.share-card .rolls .r{font-family:'Montserrat',sans-serif;font-size:9px;color:var(--ky-ink);display:flex;align-items:center;gap:8px}
+.share-card .rolls .r .l,.share-card .rolls .r .rt{min-width:68px;font-weight:500;opacity:.65}
+.share-card .rolls .r .rt{text-align:right}
+.share-card .rolls .r .tk{flex:1;height:1px;background:rgba(0,0,0,.2);position:relative}
+.share-card .rolls .r .tk i{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--ky-mustard);top:-2.5px}
+.share-card .foot{background:#fff;padding:10px 28px;display:flex;justify-content:space-between;align-items:center;font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--re-warm-grey);font-weight:600}
+.share-card .foot .gold{color:var(--re-gold)}
+
+/* =========================================================
+   FULL SHARE CARD · the whole filled-in handbook as a tall
+   shareable artefact (built for LinkedIn / direct share)
+   ========================================================= */
+.full-card{aspect-ratio:1/1.414;max-width:560px;margin:0 auto;border-radius:8px;overflow:hidden;box-shadow:0 60px 120px -20px rgba(45,40,37,.45),0 20px 40px -10px rgba(45,40,37,.2);background:var(--ky-red);display:flex;flex-direction:column;color:#fff;font-family:'Fraunces',serif;transition:transform .4s;transform:rotate(-1.2deg)}
+.full-card:hover{transform:rotate(0)}
+.full-card .fc-hero{background:var(--ky-red);color:#fff;padding:30px 32px 20px;text-align:center;position:relative}
+.full-card .fc-hero .eb{font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;opacity:.85;margin-bottom:14px}
+.full-card .fc-hero h3{font-family:'Fraunces',serif;font-weight:500;font-size:38px;line-height:.98;margin:0 0 4px;letter-spacing:-.01em;color:#fff}
+.full-card .fc-hero h3 em{font-style:italic}
+.full-card .fc-hero .tline{width:44px;height:1px;background:#fff;margin:18px auto 0;opacity:.6}
+.full-card .fc-body{padding:18px 32px 22px;display:flex;flex-direction:column;gap:14px;flex:1;background:var(--ky-red)}
+.full-card .fc-block{display:flex;flex-direction:column;gap:6px;min-width:0}
+.full-card .fc-block .hd{font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.7);padding-bottom:5px;border-bottom:1px dashed rgba(255,255,255,.3)}
+.full-card .fc-block .body{font-family:'Fraunces',serif;font-size:11px;line-height:1.4;color:#fff;font-weight:500;opacity:.95}
+.full-card .fc-rolls{display:grid;gap:6px}
+.full-card .fc-rolls .r{font-family:'Montserrat',sans-serif;font-size:8px;color:#fff;display:flex;align-items:center;gap:8px}
+.full-card .fc-rolls .r .l,.full-card .fc-rolls .r .rt{min-width:68px;font-weight:500;opacity:.8}
+.full-card .fc-rolls .r .rt{text-align:right}
+.full-card .fc-rolls .r .tk{flex:1;height:1px;background:rgba(255,255,255,.35);position:relative}
+.full-card .fc-rolls .r .tk i{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--ky-mustard);top:-2.5px}
+.full-card .fc-feelings{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.full-card .fc-feelings .f{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff}
+.full-card .fc-foot{background:transparent;color:#fff;padding:14px 32px 22px;display:flex;justify-content:center;align-items:baseline;gap:14px;width:100%;margin:0;border-top:1px solid rgba(255,255,255,.18);flex-wrap:wrap}
+.full-card .fc-foot .dot{color:rgba(255,255,255,.5);font-family:'Fraunces',serif;font-size:14px}
+.full-card .fc-foot .re{display:inline-flex;align-items:baseline;gap:10px;font-family:'Fraunces',serif;font-style:italic;font-size:17px;font-weight:500;letter-spacing:-.015em;color:#fff;white-space:nowrap}
+.full-card .fc-foot .re .designed{font-family:'Montserrat',sans-serif;font-style:normal;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.6)}
+.full-card .fc-foot .re .wm{display:inline-flex;align-items:baseline;gap:0;letter-spacing:-.015em}
+.full-card .fc-foot .re .amp{color:var(--re-gold);font-style:italic;margin:0 1px}
+.full-card .fc-foot .gold{color:var(--re-gold);font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+@media(max-width:600px){
+  .full-card .fc-body{grid-template-columns:1fr}
+}
+
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--re-charcoal);color:var(--re-cream);padding:14px 22px;border-radius:999px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;transition:transform .3s, opacity .3s;z-index:50;box-shadow:0 20px 40px -10px rgba(0,0,0,.4);opacity:0;visibility:hidden;pointer-events:none}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible;pointer-events:auto}
+.toast .g{color:var(--ky-mustard);margin-right:8px}
+
+/* =========================================================
+   DECK PICKER · tick/skip cards like the ECD deck
+   ========================================================= */
+.picker{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.picker .chips{display:flex;flex-wrap:wrap;gap:8px;min-height:34px}
+.picker .chip{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.12);color:var(--ky-ink);font-family:'Fraunces',serif;font-size:15px;font-weight:500;padding:8px 14px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.picker .chip.neg{background:#fff;border-color:rgba(232,71,63,.3);color:var(--ky-red)}
+.picker .chip.pos{border-color:rgba(41,71,184,.25);color:var(--ky-blue)}
+.picker .chip .x{cursor:pointer;font-size:11px;opacity:.5;font-family:'Montserrat',sans-serif}
+.picker .chip .x:hover{opacity:1}
+.picker .chips .empty{font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:rgba(0,0,0,.35);align-self:center}
+.picker .deck-btn{align-self:flex-start;background:var(--ky-ink);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:11px 18px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s}
+.picker .deck-btn:hover{transform:translateY(-1px)}
+.picker.neg .deck-btn{background:var(--ky-red)}
+.picker.pos .deck-btn{background:var(--ky-blue)}
+
+.deck-modal{position:fixed;inset:0;background:rgba(10,8,7,.86);display:none;align-items:center;justify-content:center;z-index:100;padding:24px;backdrop-filter:blur(6px)}
+.deck-modal.on{display:flex;animation:fade .3s ease}
+.deck-inner{background:var(--re-cream);color:var(--re-charcoal);max-width:520px;width:100%;border-radius:12px;padding:26px 28px 22px;box-shadow:0 40px 100px -20px rgba(0,0,0,.6);position:relative}
+.deck-inner .deck-title{color:var(--re-charcoal)}
+.deck-inner .deck-close{color:var(--re-charcoal);opacity:.5}
+.deck-inner .deck-counter{color:var(--re-warm-grey)}
+.deck-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.deck-title{font-family:'Fraunces',serif;font-size:22px;font-weight:500;line-height:1.15;color:var(--ky-ink);max-width:380px}
+.deck-title .deck-sub{display:block;margin-top:6px;font-family:'Montserrat',sans-serif;font-style:normal;font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--re-warm-grey);text-transform:none;line-height:1.4}
+.deck-close{font-size:18px;color:var(--ky-ink);opacity:.5;padding:4px 8px}
+.deck-close:hover{opacity:1}
+.deck-counter{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,.55);font-weight:700;margin-bottom:16px}
+/* REAL ECD CARD · landscape orientation, pos = BLACK, neg = WHITE, gold word */
+.deck-card{aspect-ratio:1/.72;border-radius:12px;box-shadow:0 30px 60px -15px rgba(0,0,0,.45),0 6px 16px rgba(0,0,0,.12);padding:0;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .35s, opacity .35s;margin:0 auto;max-width:420px;width:100%}
+.deck-card.pos{background:#0a0807;border:1px solid rgba(255,255,255,.06)}
+.deck-card.neg{background:#fff;border:1px solid rgba(0,0,0,.06)}
+.deck-card .card-body{flex:1;display:flex;align-items:center;justify-content:center;padding:26px 34px;position:relative}
+.deck-card .emo-word{font-family:'Montserrat',sans-serif;font-weight:800;font-size:clamp(20px,4.8vw,34px);line-height:1.02;text-align:center;color:var(--re-gold);text-transform:uppercase;letter-spacing:-.025em;max-width:100%;word-break:normal;overflow-wrap:break-word;hyphens:none;padding:0 6px}
+.deck-card .emo-word.long{font-size:clamp(17px,4vw,28px);letter-spacing:-.03em}
+.deck-card .emo-word.xlong{font-size:clamp(15px,3.4vw,24px);letter-spacing:-.03em}
+.deck-card.pos .emo-word{color:var(--re-gold)}
+.deck-card.neg .emo-word{color:var(--re-gold)}
+.deck-card .card-tag{position:absolute;right:8px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;font-family:'Montserrat',sans-serif;font-size:7px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;white-space:nowrap;line-height:1}
+.deck-card.pos .card-tag{color:rgba(255,255,255,.35)}
+.deck-card.neg .card-tag{color:rgba(0,0,0,.35)}
+.deck-card .card-tag.l{right:auto;left:8px;transform:translateY(-50%) rotate(0)}
+.deck-card .card-foot{padding:10px 14px;display:flex;justify-content:flex-end;align-items:flex-end;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;letter-spacing:.02em}
+.deck-card.pos .card-foot{color:rgba(255,255,255,.55)}
+.deck-card.neg .card-foot{color:rgba(0,0,0,.55)}
+.deck-card .card-foot .re-mark{display:flex;align-items:center;gap:4px}
+.deck-card .card-foot .re-mark b{font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;letter-spacing:-.02em}
+.deck-card.pos .card-foot .re-mark b{color:#fff}
+.deck-card.neg .card-foot .re-mark b{color:#000}
+.deck-card .card-foot .re-mark b i{color:var(--re-gold);font-style:normal}
+.deck-actions{display:flex;justify-content:center;gap:14px;margin-top:20px}
+.deck-actions button{padding:14px 22px;border-radius:999px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.deck-actions .skip{background:var(--re-charcoal);color:var(--re-cream);border:1px solid var(--re-charcoal)}
+.deck-actions .skip:hover{background:#000}
+.deck-actions .pick{background:var(--re-gold);color:#0a0807;border:1px solid var(--re-gold)}
+.deck-actions .pick:hover{background:#D0A667}
+.deck-back{position:absolute;left:14px;top:14px;width:34px;height:34px;border-radius:999px;background:transparent;border:1px solid rgba(0,0,0,.22);color:var(--re-charcoal);font-size:14px;display:flex;align-items:center;justify-content:center;opacity:.35;pointer-events:none;transition:opacity .2s, background .2s, border-color .2s}
+.deck-back.on{opacity:1;pointer-events:auto;border-color:var(--re-charcoal)}
+.deck-back.on:hover{background:var(--re-charcoal);color:var(--re-cream);border-color:var(--re-charcoal)}
+.deck-card.slide-out-right{transform:translateX(130%) rotate(14deg);opacity:0}
+.deck-card.slide-out-left{transform:translateX(-130%) rotate(-14deg);opacity:0}
+.deck-done{text-align:center;font-family:'Fraunces',serif;font-size:20px;color:var(--ky-ink);padding:40px 10px;line-height:1.3}
+.deck-done b{color:var(--ky-red);font-style:italic;font-weight:600}
+
+/* =========================================================
+   PRINT STYLESHEET — designed to be saved as PDF via Cmd+P
+   Native print produces vector text and clean page breaks.
+   ========================================================= */
+@page{ size: A4; margin: 0; }
+
+@media print{
+  *, *::before, *::after{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    color-adjust:exact !important;
+  }
+
+  html,body{background:#fff !important}
+  body{margin:0;padding:0}
+
+  /* Hide all the app chrome */
+  .re-top, .stepnav, .share-actions, .cover-cta,
+  .kyh-chrome .bar, .deck-modal, .toast,
+  .feelings-empty, .feelings-cap, .picker .deck-btn,
+  .picker .chips .empty, .signoff{ display:none !important; }
+
+  /* Force every stage to show, one per page */
+  .stage{ display:none !important; }
+  .stage.print-on{
+    display:block !important;
+    padding:0 !important;
+    margin:0 !important;
+    page-break-after: always;
+    break-after: page;
+    min-height:auto !important;
+  }
+  .stage.print-on:last-of-type{ page-break-after:auto; break-after:auto; }
+
+  /* Skip cover (stage-0) and name input (stage-1) entirely */
+  #stage-0, #stage-1{ display:none !important; }
+
+  /* The wrap and chrome become full-bleed pages */
+  .stage .wrap{ max-width:none !important; margin:0 !important; padding:0 !important; }
+  .kyh-chrome{ box-shadow:none !important; border:0 !important; border-radius:0 !important; background:transparent !important; }
+  .kyh{ border-radius:0 !important; box-shadow:none !important; }
+  .kyh .panel{ padding: 22mm 20mm !important; min-height: 297mm; box-sizing:border-box; }
+  .kyh .panel h2{ font-size: 42pt !important; line-height:1 !important; margin-top:6mm; }
+  .kyh .panel .eyebrow{ font-size:9pt !important; }
+  .kyh .panel .instr{ font-size:12pt !important; }
+
+  /* Backgrounds for the four content pages */
+  #stage-3 .kyh{ background: var(--ky-pink) !important; }
+  #stage-3 .panel{ background: var(--ky-pink) !important; }
+  #stage-4 .kyh{ background: var(--ky-cream) !important; }
+  #stage-4 .panel{ background: var(--ky-cream) !important; }
+  #stage-5 .kyh{ background: #0a0807 !important; color: var(--re-cream) !important; }
+  #stage-5 .panel{ background: #0a0807 !important; color: var(--re-cream) !important; }
+  #stage-5 .panel h2, #stage-5 .panel .eyebrow{ color: var(--re-cream) !important; }
+  #stage-6 .kyh{ background: var(--ky-red) !important; color:#fff !important; }
+  #stage-6 .panel{ background: var(--ky-red) !important; color:#fff !important; }
+  #stage-6 .panel h2, #stage-6 .panel .eyebrow{ color:#fff !important; }
+
+  /* HOW I ROLL — gold dots, visible track lines */
+  #stage-2 .kyh, #stage-2 .panel{ background:#fff !important; }
+  .roll{ display:grid !important; grid-template-columns: 1fr 2fr 1fr !important; gap:18px !important; align-items:center !important; margin-bottom:14mm !important; }
+  .roll .lbl{ font-size:11pt !important; }
+  .roll .track{ position:relative !important; height:14pt !important; }
+  .roll .track input[type=range]{ display:none !important; }
+  .roll .track::before{ content:"" !important; position:absolute !important; left:0 !important; right:0 !important; top:50% !important; height:1.2pt !important; background:#1B1B1B !important; transform:translateY(-50%) !important; display:block !important; }
+  .roll .track::after{ content:"" !important; position:absolute !important; width:14pt !important; height:14pt !important; border-radius:50% !important; background:var(--re-gold) !important; top:50% !important; left:var(--pos, 50%) !important; transform:translate(-50%,-50%) !important; box-shadow:0 0 0 2pt #fff !important; }
+  .roll .track .ticks .tick{ background:#1B1B1B !important; }
+
+  /* THREE GOOD THINGS — let textareas grow and show their lines */
+  .three{ max-width:none !important; gap:20mm !important; margin-top:10mm !important; }
+  .three .item{ grid-template-columns: 60pt 1fr !important; gap:14pt !important; align-items:baseline !important; }
+  .three .n{ font-size:30pt !important; }
+  .three textarea{ font-size:16pt !important; line-height:1.4 !important; min-height:auto !important; height:auto !important; overflow:visible !important; border-bottom:1pt dashed rgba(0,0,0,.45) !important; padding-bottom:6pt !important; white-space:pre-wrap !important; word-wrap:break-word !important; }
+  .three textarea::placeholder{ color:transparent !important; }
+
+  /* SELF-REFLECTION — 2x2 grid that fills the page */
+  .develop-grid{ grid-template-columns: 1fr 1fr !important; gap:1pt !important; margin-top:10mm !important; }
+  .develop-cell{ min-height:auto !important; padding:14pt !important; background:transparent !important; border:1pt solid rgba(0,0,0,.18) !important; }
+  .develop-cell .vlabel{ font-size:9pt !important; }
+  .develop-cell textarea{ font-size:13pt !important; line-height:1.45 !important; min-height:auto !important; height:auto !important; overflow:visible !important; white-space:pre-wrap !important; word-wrap:break-word !important; }
+  .develop-cell textarea::placeholder{ color:transparent !important; }
+
+  /* FEELINGS — make rows fit the page, allow wrap */
+  .feelings-head{ display:none !important; }
+  .feelings-rows{ margin: 8mm 0 0 0 !important; padding:0 !important; background:transparent !important; }
+  .feeling-row{ display:grid !important; grid-template-columns: 42mm 1fr 1fr 1fr !important; gap:1pt !important; background:transparent !important; }
+  .feeling-row + .feeling-row{ margin-top:1pt !important; }
+  .feeling-row .cell{ padding:8pt 10pt !important; min-height:auto !important; background:rgba(255,255,255,.06) !important; }
+  #stage-5 .feeling-row .cell{ background:#1a1614 !important; color:var(--re-cream) !important; }
+  #stage-5 .feeling-row .cell.label{ background:#0a0807 !important; }
+  #stage-5 .feeling-row .cell.label .emo{ color:var(--re-gold) !important; }
+  #stage-6 .feeling-row .cell{ background:#fff !important; color:var(--ky-ink) !important; }
+  #stage-6 .feeling-row .cell.label{ background:var(--ky-red) !important; color:#fff !important; }
+  #stage-6 .feeling-row .cell.label .emo{ color:#fff !important; }
+  .feeling-row .cell .hd{ font-size:7.5pt !important; padding-bottom:3pt !important; }
+  .feeling-row .cell.label{ padding:8pt 8pt !important; }
+  .feeling-row .cell.label .emo{ font-size:14pt !important; line-height:1.05 !important; word-break:normal !important; overflow-wrap:break-word !important; hyphens:none !important; }
+  .feeling-row .cell.label .emo.long{ font-size:12pt !important; }
+  .feeling-row .cell.label .emo.xlong{ font-size:10.5pt !important; }
+  .feeling-row .cell textarea{ font-size:10pt !important; line-height:1.4 !important; min-height:auto !important; height:auto !important; overflow:visible !important; white-space:pre-wrap !important; word-wrap:break-word !important; }
+  .feeling-row .cell textarea::placeholder{ color:transparent !important; }
+
+  /* SHARE MOMENT — only the share card, big, centered */
+  #stage-7 .share-left{ display:none !important; }
+  #stage-7 .share-wrap{ display:block !important; }
+  #stage-7 .share-card-outer{ perspective:none !important; }
+  #stage-7 .full-card{ transform:none !important; max-width:170mm !important; margin:14mm auto !important; box-shadow:none !important; }
+
+  /* Give the cover wordmark and other text crisp print color */
+  .full-card .fc-foot{ border-top-color: rgba(255,255,255,.4) !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- R&E TOP BAR -->
+<header class="re-top">
+  <div class="brand">riders<span class="amp">&amp;</span>elephants</div>
+  <div class="crumbs">The Emotional Culture Deck <span style="opacity:.4">·</span> <b>Know Yourself Handbook</b> <span style="opacity:.4">·</span> Prototype v1.0</div>
+  <div class="actions">
+    <button class="btn ghost" onclick="restart()">Restart</button>
+    <button class="btn gold" onclick="window.print()">Print</button>
+  </div>
+</header>
+
+<!-- =========================================================
+     SVG DEFINITIONS (compass, elephant mark, blobs)
+     ========================================================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="compass" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1"/>
+      <line x1="20" y1="2" x2="20" y2="38" stroke="currentColor" stroke-width="1"/>
+      <line x1="2" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="1"/>
+      <circle cx="20" cy="20" r="2" fill="currentColor"/>
+      <polygon points="20,5 22,8 18,8" fill="currentColor"/>
+    </symbol>
+    <symbol id="blobs" viewBox="0 0 200 50">
+      <ellipse cx="50" cy="30" rx="42" ry="22" fill="#E8473F"/>
+      <ellipse cx="95" cy="28" rx="30" ry="20" fill="#1B1B1B"/>
+      <ellipse cx="130" cy="30" rx="34" ry="22" fill="#2947B8"/>
+      <ellipse cx="160" cy="28" rx="28" ry="18" fill="#D4A53A"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- =========================================================
+     STAGE 0 · THE STARTING LINE (mirrors the share moment)
+     ========================================================= -->
+<section class="stage active" id="stage-0">
+  <div class="wrap share-wrap">
+    <div class="share-left">
+      <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--re-gold);font-weight:600;margin:0 0 16px"><span style="display:inline-block;width:30px;height:2px;background:var(--re-gold);vertical-align:middle;margin-right:10px"></span>The Know Yourself Handbook</p>
+      <h1>Let's get to<br/>know <em>you.</em></h1>
+      <p>A short walkthrough of who you are and how you work. Seven steps. About four minutes if you rush. If you sit with it, you'll have a card just like this one, but yours, with your name on it.</p>
+      <p style="color:var(--re-warm-grey);max-width:440px;font-size:15px">Print the booklet. Share the card with your team. Keep it for yourself. It's designed to start the conversation with the most important person in the room, which is you.</p>
+      <div class="share-actions">
+        <button class="btn red" style="padding:18px 36px;font-size:13px" onclick="go(1)">Begin →</button>
+        <button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey);padding:18px 26px;font-size:11px" onclick="copyPracticeLink()">Share a link with your team</button>
+      </div>
+      <p style="font-size:12px;color:var(--re-warm-grey);margin-top:20px;max-width:460px">Want your team to do this too? Copy a blank link and send it around. Everyone ends up with their own filled-in card, and you see each other for who you actually are.</p>
+      <p style="font-size:11px;color:var(--re-warm-grey);margin-top:16px;font-style:italic">Designed by Riders &amp; Elephants. Part of The Emotional Culture Deck.</p>
+    </div>
+    <div class="share-card-outer">
+      <div class="share-card">
+        <div class="topbar">
+          <svg class="compass"><use href="#compass"/></svg>
+          <div class="mark">Designed by<b>riders&amp;elephants</b></div>
+        </div>
+        <div class="ecd">The Emotional Culture Deck</div>
+        <h2 class="title">Know Yourself</h2>
+        <div class="tline"></div>
+        <div class="for">For individuals</div>
+        <div class="body">
+          <div class="name">An example card</div>
+          <div class="quote">I feel most alive when <span>I'm given a hard problem and real room to solve it.</span></div>
+          <div class="rolls">
+            <div class="r"><span class="l">Email me</span><span class="tk"><i style="left:calc(30% - 3px)"></i></span><span class="rt">Call me</span></div>
+            <div class="r"><span class="l">Night owl</span><span class="tk"><i style="left:calc(70% - 3px)"></i></span><span class="rt">Early bird</span></div>
+            <div class="r"><span class="l">Give me time to think</span><span class="tk"><i style="left:calc(40% - 3px)"></i></span><span class="rt">Work on it together now</span></div>
+            <div class="r"><span class="l">I need details</span><span class="tk"><i style="left:calc(55% - 3px)"></i></span><span class="rt">Give me big picture</span></div>
+          </div>
+        </div>
+        <div class="foot"><span>The Emotional Culture Deck</span><span class="gold">ridersandelephants.com</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 1 · NAME
+     ========================================================= -->
+<section class="stage" id="stage-1">
+  <div class="wrap">
+    <div class="kyh-chrome">
+      <div class="bar"><span class="tag">Step 1 of 7</span><span class="sep">·</span><span class="title">Who's rolling through this</span><span class="save"><span class="sdot"></span> Saved</span></div>
+      <div class="kyh">
+        <div class="panel cream">
+          <p class="eyebrow">Unfold the booklet</p>
+          <h2>Let's start with<br/>your name.</h2>
+          <p class="instr">Use the space inside to learn more about who you are and how to get the most out of yourself.</p>
+          <input id="f-name" type="text" class="name-field" placeholder="Type your first name" oninput="updateName()">
+          <div class="signoff">
+            <span>Designed by<b>riders&amp;elephants</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stepnav">
+      <div class="progress"><div class="bar"><div class="fill"></div></div><div class="count">01 / 07</div></div>
+      <div class="nav"><button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="go(0)">← Back</button><button class="btn dark" onclick="go(2)">Next →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 2 · HOW I ROLL
+     ========================================================= -->
+<section class="stage" id="stage-2">
+  <div class="wrap">
+    <div class="kyh-chrome">
+      <div class="bar"><span class="tag">Step 2 of 7</span><span class="sep">·</span><span class="title">How I Roll</span><span class="save"><span class="sdot"></span> Saved</span></div>
+      <div class="kyh">
+        <div class="panel white">
+          <p class="eyebrow">How I Roll</p>
+          <h2>Slide the dots to<br/>your natural style.</h2>
+          <p class="instr">There are no right answers. This is the quick guide the people around you wish they had on day one.</p>
+          <div class="rollset" id="rolls"></div>
+        </div>
+      </div>
+    </div>
+    <div class="stepnav">
+      <div class="progress"><div class="bar"><div class="fill"></div></div><div class="count">02 / 07</div></div>
+      <div class="nav"><button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="go(1)">← Back</button><button class="btn dark" onclick="go(3)">Next →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 3 · THREE GOOD THINGS (pink panel, handbook style)
+     ========================================================= -->
+<section class="stage" id="stage-3">
+  <div class="wrap">
+    <div class="kyh-chrome">
+      <div class="bar"><span class="tag">Step 3 of 7</span><span class="sep">·</span><span class="title">Three Good Things</span><span class="save"><span class="sdot"></span> Saved</span></div>
+      <div class="kyh">
+        <div class="panel" style="background:var(--ky-pink)">
+          <p class="eyebrow">Three Good Things</p>
+          <h2>The things I'm<br/>grateful for and why.</h2>
+          <p class="instr">Describe three good things that happened today, this week, or this month, and how you contributed to them.</p>
+          <div class="three">
+            <div class="item"><div class="n">01.</div><textarea id="f-good1" rows="1" placeholder="Shipped the concept brief to Jeremy…" oninput="autoGrow(this);syncCard()"></textarea></div>
+            <div class="item"><div class="n">02.</div><textarea id="f-good2" rows="1" placeholder="Walked before the first call and felt the difference…" oninput="autoGrow(this);syncCard()"></textarea></div>
+            <div class="item"><div class="n">03.</div><textarea id="f-good3" rows="1" placeholder="Laughed with the team for ten proper minutes…" oninput="autoGrow(this);syncCard()"></textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stepnav">
+      <div class="progress"><div class="bar"><div class="fill"></div></div><div class="count">03 / 07</div></div>
+      <div class="nav"><button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="go(2)">← Back</button><button class="btn dark" onclick="go(4)">Next →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 4 · DEVELOP (vertical labels, cream cells)
+     ========================================================= -->
+<section class="stage" id="stage-4">
+  <div class="wrap">
+    <div class="kyh-chrome">
+      <div class="bar"><span class="tag">Step 4 of 7</span><span class="sep">·</span><span class="title">Self-reflection</span><span class="save"><span class="sdot"></span> Saved</span></div>
+      <div class="kyh">
+        <div class="panel cream">
+          <p class="eyebrow">Self-reflection</p>
+          <h2>What are you<br/>trying to grow?</h2>
+          <p class="instr">Where you are and where you're heading.</p>
+          <div class="develop-grid">
+            <div class="develop-cell"><div class="vlabel">Things in my way of being successful</div><textarea id="f-way" data-grow placeholder="I say yes too fast…" oninput="autoGrow(this);syncCard()"></textarea></div>
+            <div class="develop-cell"><div class="vlabel">A habit I'm trying to break</div><textarea id="f-break" data-grow placeholder="Checking messages during deep work…" oninput="autoGrow(this);syncCard()"></textarea></div>
+            <div class="develop-cell"><div class="vlabel">An area I'm trying to learn more about</div><textarea id="f-learn" data-grow placeholder="How to give harder feedback with warmth…" oninput="autoGrow(this);syncCard()"></textarea></div>
+            <div class="develop-cell"><div class="vlabel">A skill I'm trying to develop</div><textarea id="f-skill" data-grow placeholder="Writing sharper one pagers…" oninput="autoGrow(this);syncCard()"></textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stepnav">
+      <div class="progress"><div class="bar"><div class="fill"></div></div><div class="count">04 / 07</div></div>
+      <div class="nav"><button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="go(3)">← Back</button><button class="btn dark" onclick="go(5)">Next →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 5 · EMOTIONS I WANT  (handbook inner spread style)
+     ========================================================= -->
+<section class="stage" id="stage-5">
+  <div class="wrap">
+    <div class="kyh-chrome">
+      <div class="bar"><span class="tag">Step 5 of 7</span><span class="sep">·</span><span class="title">Desired feelings</span><span class="save"><span class="sdot"></span> Saved</span></div>
+      <div class="kyh feelings-pos">
+        <div class="panel" style="padding-bottom:0">
+          <p class="eyebrow">The feelings that make my best work possible</p>
+          <h2>My success relies<br/>on feeling&hellip;</h2>
+          <p class="instr">Pick up to five desired feelings, then share why.</p>
+
+          <div class="feelings-head">
+            <div class="picker pos">
+              <div class="chips" id="chips-pos"></div>
+              <button class="deck-btn" onclick="openDeck('pos')">Choose your cards</button>
+            </div>
+          </div>
+
+          <div class="feelings-rows" id="rows-pos"></div>
+        </div>
+      </div>
+    </div>
+    <div class="stepnav">
+      <div class="progress"><div class="bar"><div class="fill"></div></div><div class="count">05 / 07</div></div>
+      <div class="nav"><button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="go(4)">← Back</button><button class="btn dark" onclick="go(6)">Next →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 6 · EMOTIONS I DON'T WANT
+     ========================================================= -->
+<section class="stage" id="stage-6">
+  <div class="wrap">
+    <div class="kyh-chrome">
+      <div class="bar"><span class="tag">Step 6 of 7</span><span class="sep">·</span><span class="title">Undesired feelings</span><span class="save"><span class="sdot"></span> Saved</span></div>
+      <div class="kyh feelings-neg">
+        <div class="panel" style="padding-bottom:0">
+          <p class="eyebrow">Undesired feelings</p>
+          <h2>Feelings I don't want to feel<br/><span style="opacity:.75">(but might from time to time).</span></h2>
+          <p class="instr">Select your top five undesired feelings, then share a little about each.</p>
+
+          <div class="feelings-head">
+            <div class="picker neg">
+              <div class="chips" id="chips-neg"></div>
+              <button class="deck-btn" onclick="openDeck('neg')">Choose your cards</button>
+            </div>
+          </div>
+
+          <div class="feelings-rows" id="rows-neg"></div>
+        </div>
+      </div>
+    </div>
+    <div class="stepnav">
+      <div class="progress"><div class="bar"><div class="fill"></div></div><div class="count">06 / 07</div></div>
+      <div class="nav"><button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="go(5)">← Back</button><button class="btn dark" onclick="go(7)">Next →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     STAGE 7 · SHARE MOMENT
+     ========================================================= -->
+<section class="stage" id="stage-7">
+  <div class="wrap share-wrap">
+    <div class="share-left">
+      <p style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--re-gold);font-weight:600;margin:0 0 16px"><span style="display:inline-block;width:30px;height:2px;background:var(--re-gold);vertical-align:middle;margin-right:10px"></span>The share moment</p>
+      <h1>That's <em>you.</em><br/>Ready to share?</h1>
+      <p>Your handbook is saved. The card below is the human snapshot of how you work best. The more places it lands, the easier it becomes for the people around you to see who you actually are.</p>
+      <div class="share-actions">
+        <button class="btn red" onclick="downloadCard()">Download your share card</button>
+        <button class="btn dark" onclick="downloadPdf()">Download PDF booklet</button>
+        <button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="emailACopy()">Email a copy</button>
+      </div>
+      <div class="share-actions" style="margin-top:14px">
+        <button class="btn ghost" style="color:var(--re-charcoal);border-color:var(--re-soft-grey)" onclick="copyPracticeLink()">Love this? Share with a friend</button>
+      </div>
+      <p style="font-size:13px;color:var(--re-warm-grey);margin-top:24px;max-width:480px;line-height:1.7"><b>Your share card</b> is the image for LinkedIn, Slack, email, or wherever your people are. Post it to start a conversation about who you are and how you work best. <b>The PDF booklet</b> is the A4 keepsake with all the detail, ideal for a one-to-one with your manager or quietly kept for yourself. <b>Email a copy</b> sends the card and the booklet to you, a manager or a colleague.</p>
+      <p style="font-size:13px;color:var(--re-warm-grey);margin-top:18px;max-width:480px;line-height:1.7"><b>Love this?</b> Send a friend a blank handbook so they can do their own and you can compare notes.</p>
+    </div>
+    <div class="share-card-outer">
+      <div class="full-card" id="full-card">
+        <div class="fc-hero">
+          <div class="eb">The Emotional Culture Deck</div>
+          <h3 id="fc-title">Know yourself,<br/><em>your name.</em></h3>
+          <div class="tline"></div>
+        </div>
+        <div class="fc-body" id="fc-body">
+          <!-- Built dynamically by syncCard() -->
+        </div>
+        <div class="fc-foot">
+          <span class="re"><span class="designed">Designed by</span><span class="wm">riders<span class="amp">&amp;</span>elephants</span></span>
+          <span class="dot">·</span>
+          <span class="gold">ridersandelephants.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     DECK PICKER MODAL
+     ========================================================= -->
+<div class="deck-modal" id="deck-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="deck-inner">
+    <button class="deck-back" id="deck-back" onclick="deckBack()" aria-label="Go back to the previous card" title="Back to the previous card">←</button>
+    <div class="deck-head" style="padding-left:44px">
+      <div class="deck-title" id="deck-title">Build your top five<br/>desired feelings</div>
+      <button class="deck-close" onclick="closeDeck()" aria-label="Close">✕</button>
+    </div>
+    <div class="deck-counter"><span id="deck-picked">0</span> of 5 picked</div>
+    <div id="deck-stage">
+      <div class="deck-card pos" id="deck-card">
+        <div class="card-tag l">For individuals</div>
+        <div class="card-tag">The Emotional Culture Deck</div>
+        <div class="card-body">
+          <div class="emo-word" id="deck-emotion">Connected</div>
+        </div>
+        <div class="card-foot">
+          <span class="re-mark"><b>r<i>&amp;</i>e</b></span>
+        </div>
+      </div>
+      <div class="deck-actions">
+        <button class="skip" onclick="deckSwipe(false)">✕ Skip</button>
+        <button class="pick" onclick="deckSwipe(true)">✓ Pick</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="g">✓</span><span id="toast-msg">Saved</span></div>
+
+<script>
+const ROLLS = [
+  {left:'Email me',   right:'Call me',                 v:30},
+  {left:'Night owl',  right:'Early bird',              v:70},
+  {left:'Give me time to think', right:'Work on it together now', v:40},
+  {left:'I need details', right:'Give me big picture', v:55},
+  {left:'Tell me what to do', right:'Let me figure it out for myself', v:85},
+  {left:'Work from home', right:'Work from work', v:50}
+];
+
+// Official ECD V8 deck — desired (41) and undesired (36)
+const DECK_POS = ['Open','Understanding','Connected','Appreciated','Free','Welcome','Open-minded','Compassion','Love','Care','Non-judgemental','Humble','Grateful','Kind','Delighted','Fun-loving','Lighthearted','Easygoing','Carefree','Playful','Curious','Empathetic','Attentive','Thoughtful','Courageous','Optimistic','Equal','Helpful','Confident','Brave','Daring','Inspired','Proud','Energised','Encouraged','Ease','Supported','Spontaneous','Unique','Secure','Involved'];
+const DECK_NEG = ['Confused','Afraid','Judged','Controlled','Reactive','Insulted','Rebellious','Impatient','Diminished','Alienated','Disheartened','Closed','Stuck','Blocked','Uncertain','Embarrassed','Hesitant','Uncomfortable','Incapable','Alone','Paralysed','Inferior','Overwhelmed','Uncaring','Anxious','Restless','Insecure','Defensive','Guarded','Intolerant','Intimidated','Unwelcome','Disconnected','Doubt','Powerless','Neglect'];
+
+// Per-emotion answers: { emotion: {trigger, personal, external} }
+const state = {stage:0, name:'', rolls:ROLLS.map(r=>r.v), pickedPos:[], pickedNeg:[], answersPos:{}, answersNeg:{}};
+
+function buildRolls(){
+  const wrap = document.getElementById('rolls');
+  wrap.innerHTML = ROLLS.map((r,i)=>`
+    <div class="roll" style="--pos:${state.rolls[i]}%">
+      <div class="lbl">${r.left}</div>
+      <div class="track">
+        <div class="ticks">${'<span class="tick"></span>'.repeat(9)}</div>
+        <input type="range" min="0" max="100" value="${state.rolls[i]}" oninput="state.rolls[${i}]=+this.value;this.closest('.roll').style.setProperty('--pos',this.value+'%');syncCard()">
+      </div>
+      <div class="lbl r">${r.right}</div>
+    </div>
+  `).join('');
+}
+
+function go(n){
+  document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
+  document.getElementById('stage-'+n).classList.add('active');
+  state.stage = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateProgress();
+  if(n===2) buildRolls();
+  if(n===7) syncCard();
+  setTimeout(autoGrowAll, 60);
+}
+
+function updateProgress(){
+  const pct = Math.max(0, Math.min(1, state.stage/7))*100;
+  document.querySelectorAll('.stepnav .fill').forEach(f=>f.style.width = pct+'%');
+  document.querySelectorAll('.stepnav .count').forEach((c)=>{
+    c.textContent = String(state.stage).padStart(2,'0')+' / 07';
+  });
+}
+
+function updateName(){
+  state.name = document.getElementById('f-name').value;
+  syncCard();
+}
+
+function getField(id){ const el=document.getElementById(id); return el ? (el.value||'').trim() : ''; }
+
+// Auto-grow textarea to fit content (no scrollbars, expands like a Word doc)
+function autoGrow(el){ if(!el) return; el.style.height='auto'; el.style.height=(el.scrollHeight+2)+'px'; }
+function autoGrowAll(){ document.querySelectorAll('textarea[data-grow], .three textarea, .develop-cell textarea').forEach(autoGrow); }
+
+function syncCard(){
+  const nm = (state.name||'').trim() || 'your name';
+  const t = document.getElementById('fc-title');
+  if(t) t.innerHTML = 'Know yourself,<br/><em>'+nm.replace(/</g,'&lt;')+'.</em>';
+  const body = document.getElementById('fc-body');
+  if(!body) return;
+
+  const good = [getField('f-good1'), getField('f-good2'), getField('f-good3')].filter(Boolean);
+
+  const rollsHtml = ROLLS.slice(0,6).map((r,i)=>`
+    <div class="r"><span class="l">${r.left}</span><span class="tk"><i style="left:calc(${state.rolls[i]}% - 3px)"></i></span><span class="rt">${r.right}</span></div>
+  `).join('');
+
+  const posChips = state.pickedPos.map(w=>`<span class="f">${w}</span>`).join('');
+  const negChips = state.pickedNeg.map(w=>`<span class="f">${w}</span>`).join('');
+
+  body.innerHTML = `
+    <div class="fc-block">
+      <div class="hd">How I Roll</div>
+      <div class="fc-rolls">${rollsHtml}</div>
+    </div>
+    ${good.length ? `
+    <div class="fc-block">
+      <div class="hd">Three good things</div>
+      <div class="body">${good.map((g,i)=>`${i+1}. ${g}`).join('<br/>')}</div>
+    </div>` : ''}
+    ${posChips ? `
+    <div class="fc-block">
+      <div class="hd">My success relies on feeling</div>
+      <div class="fc-feelings">${posChips}</div>
+    </div>` : ''}
+    ${negChips ? `
+    <div class="fc-block">
+      <div class="hd">I don't want to feel but might from time to time</div>
+      <div class="fc-feelings">${negChips}</div>
+    </div>` : ''}
+  `;
+}
+
+function restart(){
+  state.stage=0; state.name=''; state.rolls=ROLLS.map(r=>r.v); state.pickedPos=[]; state.pickedNeg=[]; state.answersPos={}; state.answersNeg={};
+  document.querySelectorAll('input,textarea').forEach(el=>{ if(el.type==='range')el.value=50; else el.value=''; });
+  renderChips('pos'); renderChips('neg');
+  renderFeelingRows('pos'); renderFeelingRows('neg');
+  syncCard();
+  go(0);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('on');
+  clearTimeout(window.__tt);
+  window.__tt = setTimeout(()=>{ t.classList.remove('on'); }, 2400);
+}
+
+// ---------- STATE SERIALISATION (for shareable links) ----------
+const FIELD_IDS = ['f-name','f-good1','f-good2','f-good3','f-way','f-break','f-learn','f-skill'];
+
+function collectState(){
+  const fields = {};
+  FIELD_IDS.forEach(id=>{ const el=document.getElementById(id); if(el) fields[id]=el.value||''; });
+  return {n:state.name, r:state.rolls, f:fields, pp:state.pickedPos, pn:state.pickedNeg, ap:state.answersPos, an:state.answersNeg};
+}
+
+function encodeState(){
+  try{ return btoa(unescape(encodeURIComponent(JSON.stringify(collectState())))); }catch(e){ return ''; }
+}
+
+function applyState(s){
+  if(!s) return;
+  if(s.n){ state.name = s.n; const nf=document.getElementById('f-name'); if(nf) nf.value = s.n; }
+  if(Array.isArray(s.r)){ state.rolls = s.r.slice(0, ROLLS.length); }
+  if(s.f){ Object.keys(s.f).forEach(id=>{ const el=document.getElementById(id); if(el) el.value = s.f[id]; }); }
+  if(Array.isArray(s.pp)){ state.pickedPos = s.pp.slice(0,5); }
+  if(Array.isArray(s.pn)){ state.pickedNeg = s.pn.slice(0,5); }
+  if(s.ap && typeof s.ap==='object'){ state.answersPos = s.ap; }
+  if(s.an && typeof s.an==='object'){ state.answersNeg = s.an; }
+  renderChips('pos'); renderChips('neg');
+  renderFeelingRows('pos'); renderFeelingRows('neg');
+}
+
+function loadFromUrl(){
+  const h = window.location.hash || '';
+  const m = h.match(/s=([^&]+)/);
+  if(!m) return false;
+  try{
+    const json = decodeURIComponent(escape(atob(m[1])));
+    const obj = JSON.parse(json);
+    applyState(obj);
+    buildRolls();
+    syncCard();
+    go(7);
+    showToast('Shared handbook loaded');
+    return true;
+  }catch(e){ console.warn('Could not parse share link', e); return false; }
+}
+
+async function copyShareLink(){
+  const enc = encodeState();
+  const base = window.location.href.split('#')[0];
+  const url = base + '#s=' + enc;
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast('Your share link is copied');
+  }catch(e){
+    window.prompt('Copy your share link', url);
+  }
+}
+
+function emailACopy(){
+  // Open the user's mail client straight away with a pre-filled draft.
+  // The shareable URL goes inline so the recipient can open the live card.
+  // Files (card PNG + booklet PDF) are not auto-attached because browsers
+  // cannot attach local files to mailto. The note explains how to add them.
+  const nm = (state.name||'').trim() || 'me';
+  const slug = ((state.name||'know-yourself').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''))||'know-yourself';
+  const liveUrl = window.location.href.split('#')[0] + '#' + (window.location.hash.replace(/^#/,'') || '');
+  const subject = encodeURIComponent(`${nm}'s Know Yourself handbook`);
+  const body = encodeURIComponent(
+    `Hi,\n\n`+
+    `This is my Know Yourself handbook. A short walkthrough of how I work best, from the Emotional Culture Deck by Riders & Elephants.\n\n`+
+    `Open the live version: ${liveUrl}\n\n`+
+    `If you would like the share card image or the full booklet, you can download them from the page directly.\n\n`+
+    `Have a read when you get a moment, then let's chat about it.\n\n`+
+    `— ${nm}\n\n`+
+    `Designed by Riders & Elephants · ridersandelephants.com`
+  );
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  showToast('Opening your mail app');
+}
+
+async function copyPracticeLink(){
+  const base = window.location.href.split('#')[0];
+  const url = base + '#practice=1';
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast('Team practice link is copied');
+  }catch(e){
+    window.prompt('Copy team practice link', url);
+  }
+}
+
+// ---------- DOWNLOAD CARD (PNG via html2canvas) ----------
+async function downloadCard(){
+  const card = document.getElementById('full-card');
+  if(!card || typeof html2canvas==='undefined'){ showToast('Download not ready, try again'); return; }
+  const orig = {transform:card.style.transform, aspectRatio:card.style.aspectRatio, height:card.style.height};
+  card.style.transform = 'rotate(0deg)';
+  card.style.aspectRatio = 'auto';
+  card.style.height = 'auto';
+  showToast('Building your share card…');
+  try{
+    // Force full natural size so html2canvas captures the whole card (use scrollHeight to avoid bottom crop)
+    const rect = card.getBoundingClientRect();
+    const fullH = Math.max(card.scrollHeight, rect.height);
+    const canvas = await html2canvas(card, {scale:4, backgroundColor:'#E8473F', useCORS:true, logging:false, width:rect.width, height:fullH, windowWidth:rect.width, windowHeight:fullH});
+    const slug = ((state.name||'know-yourself').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''))||'know-yourself';
+    const link = document.createElement('a');
+    link.download = `know-yourself-${slug}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('Share card downloaded');
+  }catch(e){
+    console.error(e);
+    showToast('Download failed, please try again');
+  }finally{
+    card.style.transform = orig.transform;
+    card.style.aspectRatio = orig.aspectRatio;
+    card.style.height = orig.height;
+  }
+}
+
+// ---------- DOWNLOAD PDF BOOKLET (native browser print) ----------
+// Browser print gives us vector text, proper page breaks, and a clean
+// "Save as PDF" experience without fighting html2canvas.
+function downloadPdf(){
+  // Make sure rolls + share card are populated for any stages user hasn't visited
+  try{ buildRolls(); }catch(e){}
+  try{ syncCard(); }catch(e){}
+  try{ autoGrowAll(); }catch(e){}
+  // Mark the stages we want printed (skip cover + name input)
+  const printStages = ['stage-2','stage-3','stage-4','stage-5','stage-6','stage-7'];
+  document.querySelectorAll('.stage').forEach(s => s.classList.remove('print-on'));
+  printStages.forEach(id => { const el = document.getElementById(id); if(el) el.classList.add('print-on'); });
+  showToast('Opening print dialog');
+  setTimeout(()=> window.print(), 220);
+  // Cleanup after print
+  const cleanup = () => {
+    document.querySelectorAll('.stage').forEach(s => s.classList.remove('print-on'));
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+}
+
+// Legacy html2canvas PDF (kept disabled for reference)
+async function downloadPdf_legacy(){
+  if(typeof html2canvas==='undefined' || !window.jspdf){ showToast('PDF engine loading, try again'); return; }
+  showToast('Building your PDF booklet…');
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+  const A4_W = 210, A4_H = 297;
+  // Five-page booklet per v0.8 spec:
+  // 1. The share card (portrait) — high-level summary
+  // 2. Three good things (landscape, full entries)
+  // 3. Self-reflection (landscape, four cells)
+  // 4. My success relies on feeling (landscape, desired feelings rows)
+  // 5. Feelings I don't want to feel (landscape, undesired feelings rows)
+  const targets = [
+    {sel:'#full-card', label:'Cover'},
+    {sel:'#stage-3 .kyh-chrome', label:'Three good things'},
+    {sel:'#stage-4 .kyh-chrome', label:'Self-reflection'},
+    {sel:'#stage-5 .kyh-chrome', label:'Desired feelings'},
+    {sel:'#stage-6 .kyh-chrome', label:'Undesired feelings'},
+  ];
+  // Temporarily reveal each stage so html2canvas can capture it
+  const restore = [];
+  document.querySelectorAll('.stage').forEach(s=>{ restore.push([s, s.classList.contains('active')]); s.classList.add('active'); s.style.display='block'; });
+  document.body.classList.add('pdf-mode');
+  // Force every textarea to fit its content for the capture
+  autoGrowAll();
+  const card = document.getElementById('full-card');
+  const cardOrig = card ? card.style.transform : '';
+  if(card) card.style.transform = 'rotate(0deg)';
+  try{
+    let firstPage = true;
+    for(let i=0;i<targets.length;i++){
+      const node = document.querySelector(targets[i].sel);
+      if(!node) continue;
+      const isCover = targets[i].sel === '#full-card';
+      const canvas = await html2canvas(node, {scale:3, backgroundColor: isCover ? '#E8473F' : '#ffffff', useCORS:true, logging:false});
+      const img = canvas.toDataURL('image/png');
+      const cw = canvas.width, ch = canvas.height;
+      // Pick page orientation based on the capture's own aspect ratio
+      const landscape = cw > ch;
+      const pageW = landscape ? A4_H : A4_W;
+      const pageH = landscape ? A4_W : A4_H;
+      // Scale to fit, then center. Small 6mm bleed so content sits edge to edge
+      const bleed = 6;
+      const availW = pageW - bleed*2;
+      const availH = pageH - bleed*2;
+      let w = availW;
+      let h = w * (ch/cw);
+      if(h > availH){ h = availH; w = h * (cw/ch); }
+      const x = (pageW - w)/2;
+      const y = (pageH - h)/2;
+      if(!firstPage) pdf.addPage(landscape ? [A4_H, A4_W] : [A4_W, A4_H], landscape ? 'landscape' : 'portrait');
+      else if(landscape){
+        // Rotate first page if the cover ends up landscape (rare)
+        pdf.deletePage(1);
+        pdf.addPage([A4_H, A4_W], 'landscape');
+      }
+      firstPage = false;
+      pdf.addImage(img, 'PNG', x, y, w, h, undefined, 'FAST');
+    }
+    const slug = ((state.name||'know-yourself').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''))||'know-yourself';
+    pdf.save(`know-yourself-${slug}.pdf`);
+    showToast('PDF booklet downloaded');
+  }catch(e){
+    console.error(e);
+    showToast('PDF failed, please try again');
+  }finally{
+    document.body.classList.remove('pdf-mode');
+    restore.forEach(([s,was])=>{ s.style.display=''; if(!was) s.classList.remove('active'); });
+    if(card) card.style.transform = cardOrig;
+  }
+}
+
+// ---------- DECK PICKER ----------
+const deck = {mode:'pos', pool:[], idx:0, history:[]};
+
+const DECK_CAP = 5;
+
+function openDeck(mode){
+  deck.mode = mode;
+  const source = mode==='pos' ? DECK_POS : DECK_NEG;
+  // Shuffle a fresh pool
+  deck.pool = source.slice().sort(()=>Math.random()-0.5);
+  deck.idx = 0;
+  deck.history = [];
+  const modal = document.getElementById('deck-modal');
+  modal.classList.add('on');
+  modal.classList.toggle('pos', mode==='pos');
+  modal.classList.toggle('neg', mode==='neg');
+  modal.setAttribute('aria-hidden','false');
+  const card = document.getElementById('deck-card');
+  card.classList.remove('slide-out-left','slide-out-right');
+  card.classList.toggle('pos', mode==='pos');
+  card.classList.toggle('neg', mode==='neg');
+  document.getElementById('deck-title').innerHTML = mode==='pos'
+    ? 'Set your top five<br/>desired feelings<br/><span class="deck-sub">Feelings I want to feel at work</span>'
+    : 'Set your top five<br/>undesired feelings<br/><span class="deck-sub">Feelings I don\u2019t want to feel but might from time to time</span>';
+  updateDeckCard();
+  updateDeckCounter();
+  updateBackButton();
+  document.getElementById('deck-stage').style.display = '';
+}
+
+function closeDeck(){
+  const modal = document.getElementById('deck-modal');
+  modal.classList.remove('on');
+  modal.setAttribute('aria-hidden','true');
+  renderChips(deck.mode);
+  renderFeelingRows(deck.mode);
+  syncCard();
+}
+
+function updateDeckCard(){
+  const emo = deck.pool[deck.idx];
+  if(emo){
+    const el = document.getElementById('deck-emotion');
+    el.textContent = emo.toUpperCase();
+    el.classList.remove('long','xlong');
+    if(emo.length >= 12) el.classList.add('xlong');
+    else if(emo.length >= 10) el.classList.add('long');
+  } else {
+    // Out of cards
+    document.getElementById('deck-stage').innerHTML = '<div class="deck-done">You\u2019re <b>all set.</b><br/>Close this and the rest is text.</div>';
+  }
+  updateBackButton();
+}
+
+function updateBackButton(){
+  const btn = document.getElementById('deck-back');
+  if(!btn) return;
+  btn.classList.toggle('on', deck.history.length > 0);
+}
+
+function deckBack(){
+  if(!deck.history.length) return;
+  const last = deck.history.pop();
+  // Undo the action
+  if(last.picked){
+    const list = deck.mode==='pos' ? state.pickedPos : state.pickedNeg;
+    const i = list.lastIndexOf(last.emo);
+    if(i >= 0) list.splice(i, 1);
+    const store = deck.mode==='pos' ? state.answersPos : state.answersNeg;
+    delete store[last.emo];
+  }
+  // Step the index back so the previous card shows again
+  if(deck.idx > 0) deck.idx--;
+  // Make sure the deck-stage is the card view (in case "all set" message replaced it)
+  const stage = document.getElementById('deck-stage');
+  if(!document.getElementById('deck-card')){
+    // Rebuild the card markup
+    stage.innerHTML = `
+      <div class="deck-card ${deck.mode}" id="deck-card">
+        <div class="card-tag l">For individuals</div>
+        <div class="card-tag">The Emotional Culture Deck</div>
+        <div class="card-body"><div class="emo-word" id="deck-emotion">Connected</div></div>
+        <div class="card-foot"><span class="re-mark"><b>r<i>&amp;</i>e</b></span></div>
+      </div>
+      <div class="deck-actions">
+        <button class="skip" onclick="deckSwipe(false)">\u2715 Skip</button>
+        <button class="pick" onclick="deckSwipe(true)">\u2713 Pick</button>
+      </div>`;
+  }
+  updateDeckCard();
+  updateDeckCounter();
+}
+
+function updateDeckCounter(){
+  const picked = deck.mode==='pos' ? state.pickedPos.length : state.pickedNeg.length;
+  document.getElementById('deck-picked').textContent = picked;
+  const label = document.querySelector('.deck-counter');
+  if(label){ label.innerHTML = '<span id="deck-picked">'+picked+'</span> of '+DECK_CAP+' picked'; }
+}
+
+function deckSwipe(picked){
+  const card = document.getElementById('deck-card');
+  const pickedList = deck.mode==='pos' ? state.pickedPos : state.pickedNeg;
+  const emo = deck.pool[deck.idx];
+  let didPick = false;
+  if(picked && emo && pickedList.length<DECK_CAP && !pickedList.includes(emo)){
+    pickedList.push(emo);
+    didPick = true;
+  }
+  // Push to history so Back can undo
+  if(emo){ deck.history.push({emo, picked: didPick}); }
+  card.classList.add(picked ? 'slide-out-right' : 'slide-out-left');
+  setTimeout(()=>{
+    deck.idx++;
+    card.classList.remove('slide-out-right','slide-out-left');
+    updateDeckCounter();
+    updateBackButton();
+    if(pickedList.length>=DECK_CAP || deck.idx>=deck.pool.length){
+      // Done. Auto close after short beat.
+      renderChips(deck.mode);
+      renderFeelingRows(deck.mode);
+      syncCard();
+      setTimeout(closeDeck, 450);
+    } else {
+      updateDeckCard();
+    }
+  }, 280);
+}
+
+function renderChips(mode){
+  const wrap = document.getElementById('chips-'+mode);
+  if(!wrap) return;
+  const list = mode==='pos' ? state.pickedPos : state.pickedNeg;
+  if(!list.length){
+    wrap.innerHTML = '<div class="empty">Tap below to pick your top five</div>';
+    return;
+  }
+  wrap.innerHTML = list.map((w,i)=>`<span class="chip ${mode}">${w}<span class="x" onclick="removeChip('${mode}',${i})">✕</span></span>`).join('');
+}
+
+function removeChip(mode, i){
+  const list = mode==='pos' ? state.pickedPos : state.pickedNeg;
+  const removed = list.splice(i,1)[0];
+  if(removed){
+    const store = mode==='pos' ? state.answersPos : state.answersNeg;
+    delete store[removed];
+  }
+  renderChips(mode);
+  renderFeelingRows(mode);
+  syncCard();
+}
+
+function renderFeelingRows(mode){
+  const wrap = document.getElementById('rows-'+mode);
+  if(!wrap) return;
+  const list = mode==='pos' ? state.pickedPos : state.pickedNeg;
+  const store = mode==='pos' ? state.answersPos : state.answersNeg;
+  const heads = mode==='pos'
+    ? {t:'I feel this when…', p:'To feel this more often I need to…', e:"I won't feel this if people…"}
+    : {t:'I feel this when…', p:'To manage or cope when I feel this I need to…', e:'When I feel this I need people to…'};
+  const phs = mode==='pos'
+    ? {t:"I'm given a hard problem and real room to solve it…", p:'Block two mornings a week for deep work…', e:'Fill my calendar without asking…'}
+    : {t:"Decisions are made in rooms I'm not in…", p:'Walk, name it out loud, ask for the why…', e:'Slow down and hear me out for ten minutes…'};
+  if(!list.length){
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = list.map((emo,idx)=>{
+    const a = store[emo] || {t:'',p:'',e:''};
+    const n = String(idx+1).padStart(2,'0');
+    return `
+      <div class="feeling-row">
+        <div class="cell label">
+          <div class="num">Feeling ${n}</div>
+          <div class="emo${emo.length>=12?' xlong':emo.length>=10?' long':''}">${emo}</div>
+        </div>
+        <div class="cell">
+          <div class="hd">${heads.t}</div>
+          <textarea placeholder="${phs.t}" oninput="updateFeeling('${mode}','${emo.replace(/'/g,"&#39;")}','t',this.value)">${(a.t||'').replace(/</g,'&lt;')}</textarea>
+        </div>
+        <div class="cell">
+          <div class="hd">${heads.p}</div>
+          <textarea placeholder="${phs.p}" oninput="updateFeeling('${mode}','${emo.replace(/'/g,"&#39;")}','p',this.value)">${(a.p||'').replace(/</g,'&lt;')}</textarea>
+        </div>
+        <div class="cell">
+          <div class="hd">${heads.e}</div>
+          <textarea placeholder="${phs.e}" oninput="updateFeeling('${mode}','${emo.replace(/'/g,"&#39;")}','e',this.value)">${(a.e||'').replace(/</g,'&lt;')}</textarea>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function updateFeeling(mode, emo, key, val){
+  const store = mode==='pos' ? state.answersPos : state.answersNeg;
+  if(!store[emo]) store[emo] = {t:'',p:'',e:''};
+  store[emo][key] = val;
+  syncCard();
+}
+
+document.addEventListener('keydown',e=>{
+  // Deck shortcuts
+  if(document.getElementById('deck-modal').classList.contains('on')){
+    if(e.key==='Escape') closeDeck();
+    if(e.key==='ArrowRight') deckSwipe(true);
+    if(e.key==='ArrowLeft') deckSwipe(false);
+    return;
+  }
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  if(e.key==='ArrowRight' && state.stage<7) go(state.stage+1);
+  if(e.key==='ArrowLeft' && state.stage>0) go(state.stage-1);
+});
+
+buildRolls();
+updateProgress();
+renderChips('pos');
+renderChips('neg');
+renderFeelingRows('pos');
+renderFeelingRows('neg');
+
+// If the URL has a shared state OR practice flag, handle it
+(function(){
+  const h = window.location.hash || '';
+  if(/practice=1/.test(h)){
+    // Fresh handbook, just begin
+    showToast('Practice mode, blank handbook');
+    return;
+  }
+  if(/s=/.test(h)){ loadFromUrl(); }
+})();
+</script>
+</body>
+</html>
