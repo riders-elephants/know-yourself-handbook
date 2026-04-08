@@ -165,11 +165,12 @@ input,textarea{font-family:inherit;color:inherit}
 .rollset{display:grid;gap:26px;margin-top:8px}
 .roll{display:grid;grid-template-columns:150px 1fr 150px;align-items:center;gap:24px}
 @media (max-width:700px){
-  .rollset{gap:34px}
-  .roll{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px 14px;align-items:end}
-  .roll .lbl{font-size:13px;line-height:1.25}
+  .rollset{gap:36px;margin-top:14px}
+  .roll{display:grid !important;grid-template-columns:1fr 1fr !important;grid-template-rows:auto auto !important;column-gap:14px !important;row-gap:10px !important;align-items:end}
+  .roll .lbl{font-size:14px !important;line-height:1.2 !important;text-align:left !important}
   .roll .lbl.r{text-align:right !important}
-  .roll .track{grid-column:1 / -1;height:30px}
+  .roll .track{grid-column:1 / -1 !important;width:100% !important;height:32px}
+  .roll .track::before{height:1.5px}
 }
 .roll .lbl{font-family:'Fraunces',serif;font-size:18px;color:var(--ky-red);font-weight:500}
 .roll .lbl.r{text-align:right}
@@ -537,7 +538,7 @@ input,textarea{font-family:inherit;color:inherit}
 <!-- R&E TOP BAR -->
 <header class="re-top">
   <div class="brand">riders<span class="amp">&amp;</span>elephants</div>
-  <div class="crumbs">The Emotional Culture Deck <span style="opacity:.4">·</span> <b>Know Yourself Handbook</b> <span style="opacity:.4">·</span> Prototype v1.2</div>
+  <div class="crumbs">The Emotional Culture Deck <span style="opacity:.4">·</span> <b>Know Yourself Handbook</b> <span style="opacity:.4">·</span> Prototype v1.3</div>
   <div class="actions">
     <button class="btn ghost" onclick="restart()">Restart</button>
     <button class="btn gold" onclick="window.print()">Print</button>
@@ -594,7 +595,7 @@ input,textarea{font-family:inherit;color:inherit}
         <div class="for">For individuals</div>
         <div class="body">
           <div class="name">An example card</div>
-          <div class="quote">I feel most alive when <span>I'm given a hard problem and real room to solve it.</span></div>
+          <div class="quote">I feel energised when <span>I'm given a hard problem and real room to solve it.</span></div>
           <div class="rolls">
             <div class="r"><span class="l">Email me</span><span class="tk"><i style="left:calc(30% - 3px)"></i></span><span class="rt">Call me</span></div>
             <div class="r"><span class="l">Night owl</span><span class="tk"><i style="left:calc(70% - 3px)"></i></span><span class="rt">Early bird</span></div>
@@ -644,7 +645,7 @@ input,textarea{font-family:inherit;color:inherit}
       <div class="kyh">
         <div class="panel white">
           <p class="eyebrow">How I Roll</p>
-          <h2>Slide the dots to<br/>your natural style.</h2>
+          <h2>Slide<br/>the dots.</h2>
           <p class="instr">There are no right answers. This is the quick guide the people around you wish they had on day one.</p>
           <div class="rollset" id="rolls"></div>
         </div>
