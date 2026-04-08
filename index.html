@@ -164,7 +164,13 @@ input,textarea{font-family:inherit;color:inherit}
 /* HOW I ROLL sliders — inner */
 .rollset{display:grid;gap:26px;margin-top:8px}
 .roll{display:grid;grid-template-columns:150px 1fr 150px;align-items:center;gap:24px}
-@media (max-width:700px){.roll{grid-template-columns:1fr;gap:6px}.roll .lbl.r{text-align:left !important}}
+@media (max-width:700px){
+  .rollset{gap:34px}
+  .roll{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:10px 14px;align-items:end}
+  .roll .lbl{font-size:13px;line-height:1.25}
+  .roll .lbl.r{text-align:right !important}
+  .roll .track{grid-column:1 / -1;height:30px}
+}
 .roll .lbl{font-family:'Fraunces',serif;font-size:18px;color:var(--ky-red);font-weight:500}
 .roll .lbl.r{text-align:right}
 .roll .track{position:relative;height:36px;display:flex;align-items:center}
@@ -256,8 +262,17 @@ input,textarea{font-family:inherit;color:inherit}
 .kyh.feelings-neg .feelings-empty{padding:48px 48px 56px;text-align:center;font-family:'Fraunces',serif;font-style:italic;font-size:18px;color:rgba(0,0,0,.35);background:#fff}
 
 @media(max-width:820px){
-  .feeling-row{grid-template-columns:1fr}
-  .feeling-row .cell{min-height:auto}
+  .feelings-rows{margin:18px -20px 0}
+  .feeling-row{grid-template-columns:1fr;gap:0}
+  .feeling-row + .feeling-row{margin-top:14px}
+  .feeling-row .cell{min-height:auto;padding:18px 22px;gap:8px}
+  .feeling-row .cell.label{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;padding:22px 22px 18px}
+  .feeling-row .cell.label .num{order:-1;font-size:9px;letter-spacing:.16em}
+  .feeling-row .cell.label .emo{font-size:30px !important;line-height:1.05;letter-spacing:-.01em;text-align:left}
+  .feeling-row .cell.label .emo.long{font-size:26px !important}
+  .feeling-row .cell.label .emo.xlong{font-size:22px !important}
+  .feeling-row .cell .hd{font-size:9px;padding-bottom:6px;opacity:.65}
+  .feeling-row .cell textarea{font-size:15px;line-height:1.5;min-height:64px}
 }
 
 .stepnav{display:flex;align-items:center;justify-content:space-between;margin-top:32px;gap:16px;flex-wrap:wrap}
@@ -276,6 +291,7 @@ input,textarea{font-family:inherit;color:inherit}
 .share-left h1 em{font-style:italic;color:var(--ky-red)}
 .share-left p{color:var(--re-warm-grey);max-width:440px;font-size:16px}
 .share-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+@media(max-width:700px){.share-actions{flex-direction:column;align-items:stretch}.share-actions .btn{width:100%;justify-content:center;text-align:center;padding:16px 18px}}
 
 .share-card-outer{perspective:1400px}
 .share-card{aspect-ratio:1/1;border-radius:6px;overflow:hidden;box-shadow:0 50px 100px -20px rgba(45,40,37,.4),0 12px 30px -10px rgba(45,40,37,.2);background:var(--ky-red);display:flex;flex-direction:column;transform:rotate(-1.5deg);transition:transform .4s;color:#fff;font-family:'Fraunces',serif;position:relative}
@@ -521,7 +537,7 @@ input,textarea{font-family:inherit;color:inherit}
 <!-- R&E TOP BAR -->
 <header class="re-top">
   <div class="brand">riders<span class="amp">&amp;</span>elephants</div>
-  <div class="crumbs">The Emotional Culture Deck <span style="opacity:.4">·</span> <b>Know Yourself Handbook</b> <span style="opacity:.4">·</span> Prototype v1.0</div>
+  <div class="crumbs">The Emotional Culture Deck <span style="opacity:.4">·</span> <b>Know Yourself Handbook</b> <span style="opacity:.4">·</span> Prototype v1.2</div>
   <div class="actions">
     <button class="btn ghost" onclick="restart()">Restart</button>
     <button class="btn gold" onclick="window.print()">Print</button>
@@ -677,8 +693,8 @@ input,textarea{font-family:inherit;color:inherit}
       <div class="bar"><span class="tag">Step 4 of 7</span><span class="sep">·</span><span class="title">Self-reflection</span><span class="save"><span class="sdot"></span> Saved</span></div>
       <div class="kyh">
         <div class="panel cream">
-          <p class="eyebrow">Self-reflection</p>
-          <h2>What are you<br/>trying to grow?</h2>
+          <p class="eyebrow">What are you trying to grow?</p>
+          <h2>Self<br/>reflection.</h2>
           <p class="instr">Where you are and where you're heading.</p>
           <div class="develop-grid">
             <div class="develop-cell"><div class="vlabel">Things in my way of being successful</div><textarea id="f-way" data-grow placeholder="I say yes too fast…" oninput="autoGrow(this);syncCard()"></textarea></div>
@@ -989,10 +1005,20 @@ function loadFromUrl(){
   }catch(e){ console.warn('Could not parse share link', e); return false; }
 }
 
+function isMobile(){
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (window.matchMedia && window.matchMedia('(max-width: 820px)').matches);
+}
+
 async function copyShareLink(){
   const enc = encodeState();
   const base = window.location.href.split('#')[0];
   const url = base + '#s=' + enc;
+  const nm = (state.name||'').trim();
+  const text = nm ? `${nm}'s Know Yourself handbook. ${url}` : `My Know Yourself handbook. ${url}`;
+  if(navigator.share){
+    try{ await navigator.share({title:'Know Yourself handbook', text, url}); return; }
+    catch(e){ if(e && e.name==='AbortError') return; }
+  }
   try{
     await navigator.clipboard.writeText(url);
     showToast('Your share link is copied');
@@ -1026,11 +1052,19 @@ function emailACopy(){
 async function copyPracticeLink(){
   const base = window.location.href.split('#')[0];
   const url = base + '#practice=1';
+  const text = `I just did the Know Yourself handbook by Riders & Elephants. Try yours: ${url}`;
+  if(navigator.share){
+    try{
+      await navigator.share({title:'Know Yourself handbook', text, url});
+      showToast('Sharing your link');
+      return;
+    }catch(e){ if(e && e.name==='AbortError') return; }
+  }
   try{
-    await navigator.clipboard.writeText(url);
-    showToast('Team practice link is copied');
+    await navigator.clipboard.writeText(text);
+    showToast('Link and message copied');
   }catch(e){
-    window.prompt('Copy team practice link', url);
+    window.prompt('Copy this and send it to a friend', text);
   }
 }
 
@@ -1067,7 +1101,30 @@ async function downloadCard(){
 // ---------- DOWNLOAD PDF BOOKLET (native browser print) ----------
 // Browser print gives us vector text, proper page breaks, and a clean
 // "Save as PDF" experience without fighting html2canvas.
-function downloadPdf(){
+async function downloadPdf(){
+  // On mobile the print dialog is unreliable (no "Save as PDF" on iOS Safari,
+  // no printer on most phones). Offer a friendlier path: share/copy the live
+  // link and gently nudge them to open it on a desktop for the booklet.
+  if(isMobile()){
+    const enc = encodeState();
+    const base = window.location.href.split('#')[0];
+    const url = base + '#s=' + enc;
+    const text = `My Know Yourself handbook. Open this on a laptop to save the booklet as a PDF: ${url}`;
+    if(navigator.share){
+      try{
+        await navigator.share({title:'Know Yourself booklet', text, url});
+        showToast('Open the link on a laptop to save the PDF');
+        return;
+      }catch(e){ if(e && e.name==='AbortError') return; }
+    }
+    try{
+      await navigator.clipboard.writeText(url);
+      showToast('Live link copied. Open on a laptop to save PDF');
+    }catch(e){
+      window.prompt('Open this on a laptop to save the booklet as a PDF', url);
+    }
+    return;
+  }
   // Make sure rolls + share card are populated for any stages user hasn't visited
   try{ buildRolls(); }catch(e){}
   try{ syncCard(); }catch(e){}
